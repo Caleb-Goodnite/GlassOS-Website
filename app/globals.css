@@ -1,0 +1,681 @@
+/*
+  GlassOS website. Design read: product site for a free desktop operating system, for people
+  curious about Linux, in the GlassOS dark-glass language. Dials ENERGY 2 / RHYTHM 2 / MOTION 1.
+
+  Why each decision (DESIGN.md in the repo is the source):
+  - Dark page: GlassOS only ships dark glass, so the page matches the screenshots it shows.
+  - Glass on two things only, the top bar and the hero pane, because glass only reads as glass
+    with the wallpaper behind it. Everything below the wallpaper is solid.
+  - The top bar is the GlassOS top bar: a thin full-width strip, the site's identity motif.
+  - Glass edges copy the OS: bright top rim, fainter bottom rim, a darker band just inside.
+  - One accent, the OS's #6aa8ff, only on the main download buttons, the slider and focus rings.
+  - Inter, the desktop's own typeface.
+  - Pills for things you press, 20px corners for windows and screenshots, 14px for panels.
+  - Shadows only under screenshots: they stand for windows lifted off the page.
+*/
+
+:root {
+  --bg: #0c0f15;
+  --bg-raised: #131824;
+  --text: #ffffff;
+  --text-dim: rgba(255, 255, 255, 0.85);
+  --line: rgba(255, 255, 255, 0.12);
+  --accent: #6aa8ff;
+  --on-accent: #07101e;
+  --radius-window: 20px;
+  --radius-panel: 14px;
+  --page: 1200px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 64px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+a,
+button,
+input[type="range"],
+label[for] {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+  font-weight: 650;
+  line-height: 1.08;
+}
+
+h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 50;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 52px;
+}
+
+/* ------------------------------------------------------------------ glass (the OS recipe) */
+
+.glass {
+  --pane-blur: 18px;
+  --pane-tint: 0.5;
+  --pane-sat: 1.5;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(rgba(16, 20, 28, var(--pane-tint)), rgba(16, 20, 28, var(--pane-tint))) padding-box,
+    linear-gradient(
+        160deg,
+        rgba(255, 255, 255, 0.6),
+        rgba(255, 255, 255, 0.1) 35%,
+        rgba(255, 255, 255, 0.06) 65%,
+        rgba(255, 255, 255, 0.28)
+      )
+      border-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 18px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(var(--pane-blur)) saturate(var(--pane-sat));
+  -webkit-backdrop-filter: blur(var(--pane-blur)) saturate(var(--pane-sat));
+}
+
+/* ------------------------------------------------------------------ top bar */
+
+.topbar {
+  --pane-blur: 22px;
+  --pane-tint: 0.55;
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-width: 0 0 1px;
+  font-size: 15px;
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 650;
+  text-decoration: none;
+  padding: 6px 4px;
+}
+
+.topbar-nav {
+  display: flex;
+  gap: 4px;
+}
+
+.topbar-nav a {
+  padding: 6px 12px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--text-dim);
+}
+
+.topbar-nav a:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.topbar-nav a:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.topbar-menu {
+  display: none;
+  font: inherit;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  padding: 0 16px;
+  min-height: 44px;
+  height: 36px;
+}
+
+.topbar-menu:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* ------------------------------------------------------------------ hero */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero-wallpaper {
+  object-fit: cover;
+  z-index: -1;
+}
+
+.hero-inner {
+  width: 100%;
+  max-width: var(--page);
+  margin: 0 auto;
+  padding: 108px 24px 72px;
+}
+
+.pane {
+  max-width: 660px;
+  padding: 44px 44px 28px;
+  border-radius: var(--radius-window);
+  transition: backdrop-filter 160ms ease, background 160ms ease;
+  /* toward Clear, a soft shadow behind the text keeps it readable (as in the OS) */
+  text-shadow: 0 1px 14px rgba(0, 0, 0, calc(0.75 - var(--pane-tint)));
+}
+
+.pane h1 {
+  font-size: clamp(2.5rem, 6vw, 4.6rem);
+  font-weight: 680;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.pane-lead {
+  margin-top: 20px;
+  max-width: 34em;
+  font-size: 1.15rem;
+  color: var(--text);
+}
+
+.pane-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.pane-slider {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  margin-top: 36px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+
+.pane-slider label {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.pane-slider input {
+  width: 100%;
+  min-height: 44px;
+  accent-color: var(--accent);
+}
+
+/* ------------------------------------------------------------------ buttons */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  text-shadow: none;
+  transition: background 120ms ease, transform 120ms ease;
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.button-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.button-primary:hover {
+  background: #8bbcff;
+}
+
+.button-quiet {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+}
+
+.button-quiet:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* ------------------------------------------------------------------ sections */
+
+main > section {
+  max-width: var(--page);
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.desktop {
+  padding-top: 120px;
+}
+
+.section-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: end;
+  margin-bottom: 48px;
+}
+
+.section-head p {
+  color: var(--text-dim);
+  max-width: 32em;
+}
+
+.shot {
+  margin: 0;
+}
+
+.shot img {
+  width: 100%;
+  border-radius: var(--radius-window);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.7);
+  outline: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.shot figcaption {
+  margin-top: 14px;
+  font-size: 0.92rem;
+  color: var(--text-dim);
+}
+
+.shot-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 40px;
+}
+
+/* the second screenshot sits lower: two windows, not a grid of tiles */
+.shot-offset {
+  margin-top: 72px;
+}
+
+.different {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 48px;
+  padding-top: 136px;
+}
+
+.different h2 {
+  position: sticky;
+  top: 84px;
+  align-self: start;
+}
+
+.facts {
+  margin: 0;
+}
+
+.facts > div {
+  padding: 26px 0;
+  border-top: 1px solid var(--line);
+}
+
+.facts > div:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.facts dt {
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.facts dd {
+  margin: 8px 0 0;
+  color: var(--text-dim);
+  max-width: 36em;
+}
+
+.design {
+  padding-top: 136px;
+}
+
+.design-intro {
+  max-width: 44em;
+}
+
+.design-intro p {
+  margin-top: 18px;
+  font-size: 1.15rem;
+  color: var(--text-dim);
+}
+
+.design-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.design-cols > div {
+  padding: 32px;
+  border-radius: var(--radius-panel);
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+}
+
+.design-cols ul {
+  margin: 18px 0 0;
+  padding-left: 1.1em;
+  color: var(--text-dim);
+}
+
+.design-cols li + li {
+  margin-top: 12px;
+}
+
+.wallpapers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wallpapers img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.wallpapers span {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.92rem;
+  color: var(--text-dim);
+}
+
+.design-credit {
+  margin-top: 40px;
+  color: var(--text-dim);
+  max-width: 44em;
+}
+
+.design-credit a,
+.footer a,
+.iso-check {
+  text-decoration-color: rgba(255, 255, 255, 0.45);
+  text-underline-offset: 3px;
+}
+
+.design-credit a:hover,
+.footer a:hover,
+.iso-check:hover {
+  text-decoration-color: var(--text);
+}
+
+.download {
+  padding-top: 136px;
+  padding-bottom: 120px;
+}
+
+.download-lead {
+  margin-top: 16px;
+  max-width: 40em;
+  color: var(--text-dim);
+  font-size: 1.1rem;
+}
+
+.isos {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.iso {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 32px;
+  border-radius: var(--radius-panel);
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+}
+
+.iso-primary {
+  border-color: rgba(106, 168, 255, 0.55);
+}
+
+.iso h3 {
+  font-size: 1.5rem;
+}
+
+.iso h3 span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  margin-left: 6px;
+}
+
+.iso p {
+  color: var(--text-dim);
+}
+
+.iso .button {
+  margin-top: 6px;
+}
+
+.iso-check {
+  font-size: 0.92rem;
+  color: var(--text-dim);
+  padding: 10px 0;
+}
+
+.install {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-top: 64px;
+}
+
+.install ol {
+  margin: 16px 0 0;
+  padding-left: 1.3em;
+  color: var(--text-dim);
+}
+
+.install li + li {
+  margin-top: 10px;
+}
+
+.install p {
+  margin: 10px 0 28px;
+  color: var(--text-dim);
+}
+
+.footer {
+  max-width: var(--page);
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+  border-top: 1px solid var(--line);
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+
+.footer a {
+  display: inline-block;
+  padding: 10px 2px;
+}
+
+.footer-note {
+  margin-top: 4px;
+}
+
+/* ------------------------------------------------------------------ small screens */
+
+@media (max-width: 860px) {
+  .topbar-menu {
+    display: inline-flex;
+    align-items: center;
+    height: auto;
+    min-height: 36px;
+  }
+
+  .topbar-nav {
+    display: none;
+    position: absolute;
+    top: 52px;
+    right: 12px;
+    left: 12px;
+    flex-direction: column;
+    padding: 8px;
+    border-radius: var(--radius-panel);
+    background: rgba(16, 20, 28, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .topbar-nav.is-open {
+    display: flex;
+  }
+
+  .topbar-nav a {
+    padding: 12px 14px;
+  }
+
+  .hero-inner {
+    padding: 84px 16px 40px;
+  }
+
+  .pane {
+    padding: 28px 22px 18px;
+  }
+
+  .pane-slider {
+    grid-template-columns: auto 1fr;
+    row-gap: 0;
+  }
+
+  .pane-slider span {
+    display: none;
+  }
+
+  .section-head,
+  .shot-pair,
+  .different,
+  .design-cols,
+  .isos,
+  .install {
+    grid-template-columns: 1fr;
+  }
+
+  .section-head {
+    gap: 16px;
+  }
+
+  .shot-offset {
+    margin-top: 0;
+  }
+
+  .different h2 {
+    position: static;
+  }
+
+  .desktop,
+  .different,
+  .design,
+  .download {
+    padding-top: 88px;
+  }
+
+  .design-cols > div,
+  .iso {
+    padding: 24px;
+  }
+
+  .wallpapers {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    transition: none !important;
+  }
+}
